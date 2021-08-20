@@ -1,17 +1,11 @@
-ports:
-  - port: 5000
-    onOpen: open-preview
-
 tasks:
-  - before: |
-      export FLASK_APP=flaskr
-      export FLASK_ENV=development
-    init: |
-      pip install -e .
-      flask init-db
+  - init: |
+      sudo docker pull registry.jetbrains.team/p/prj/containers/projector-pycharm-c
     command: |
-      flask run
-
-vscode:
-  extensions:
-    - ms-python.python
+      sudo mkdir -p .jetbrains; sudo touch .jetbrains/.gitkeep; sudo chown -R 1000:1000 .jetbrains
+      # Community Edition
+      sudo docker run --rm -p 8887:8887 -v /workspace/template-jetbrains-pycharm/.jetbrains:/home/projector-user -it registry.jetbrains.team/p/prj/containers/projector-pycharm-c
+ports:
+  - port: 8887
+    visibility: privategp op
+    onOpen: open-browser
